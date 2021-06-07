@@ -1,4 +1,9 @@
 function WaitForCalendarToLoad() {
+	
+	// Setup page auto reload
+	setInterval(refreshPage, 30000);
+	
+	
 	//Week or Day Calendar View
     
 	document.querySelectorAll('.ms-acal-item').forEach((element) => {element.style.display = 'none';});
@@ -6,27 +11,28 @@ function WaitForCalendarToLoad() {
 	
 	LoadSodByKey("SP.UI.ApplicationPages.Calendar.js", function(){
 		SP.UI.ApplicationPages.DetailCalendarView.prototype.renderGrids_Old = SP.UI.ApplicationPages.DetailCalendarView.prototype.renderGrids;
-    	SP.UI.ApplicationPages.DetailCalendarView.prototype.renderGrids = function SP_UI_ApplicationPages_DetailCalendarView$renderGrids($p0) {
-        	this.renderGrids_Old($p0);
+		SP.UI.ApplicationPages.DetailCalendarView.prototype.renderGrids = function SP_UI_ApplicationPages_DetailCalendarView$renderGrids($p0) {
+				this.renderGrids_Old($p0);
 
-        	ColorCalendar();
-    	};
-    
-    	//Month Calendar View
-    	SP.UI.ApplicationPages.SummaryCalendarView.prototype.renderGrids_Old =  SP.UI.ApplicationPages.SummaryCalendarView.prototype.renderGrids;
-    	SP.UI.ApplicationPages.SummaryCalendarView.prototype.renderGrids = function SP_UI_ApplicationPages_SummaryCalendarView$renderGrids($p0) {
-        	this.renderGrids_Old($p0);
+				ColorCalendar();
+		};
+	
+		//Month Calendar View
+		SP.UI.ApplicationPages.SummaryCalendarView.prototype.renderGrids_Old =  SP.UI.ApplicationPages.SummaryCalendarView.prototype.renderGrids;
+		SP.UI.ApplicationPages.SummaryCalendarView.prototype.renderGrids = function SP_UI_ApplicationPages_SummaryCalendarView$renderGrids($p0) {
+				this.renderGrids_Old($p0);
 
-        	ColorCalendar();
-    	};
+				ColorCalendar();
+		};
 
-	    //Resize Calendar
-    	SP.UI.ApplicationPages.CalendarStateHandler.prototype.parentResized_Old = SP.UI.ApplicationPages.CalendarStateHandler.prototype.parentResized;
-    	SP.UI.ApplicationPages.CalendarStateHandler.prototype.parentResized = function SP_UI_ApplicationPages_CalendarStateHandler$parentResized() {
-        	this.parentResized_Old();
+		//Resize Calendar
+		SP.UI.ApplicationPages.CalendarStateHandler.prototype.parentResized_Old = SP.UI.ApplicationPages.CalendarStateHandler.prototype.parentResized;
+		SP.UI.ApplicationPages.CalendarStateHandler.prototype.parentResized = function SP_UI_ApplicationPages_CalendarStateHandler$parentResized() {
+				this.parentResized_Old();
 
-        	ColorCalendar();
-    	};  
+				ColorCalendar();
+		};  
+
 		ColorCalendar();
 		
 	});
@@ -99,7 +105,11 @@ function GetLink(linkText) {
 	var parts = linkText.split(SEPARATOR);
 	return parts[5];   
 }
-var SEPARATOR = "|||"; 	
+
+
+function refreshPage(){
+	location.reload(); 
+}
 
 // Closest Element IE polyfill
 if (!Element.prototype.matches) {
@@ -118,6 +128,7 @@ if (!Element.prototype.closest) {
 	};
 }
 
+var SEPARATOR = "|||"; 	
 window.WaitForCalendarToLoad = WaitForCalendarToLoad;
 window.ColorCalendar = ColorCalendar;  
 _spBodyOnLoadFunctionNames.push('WaitForCalendarToLoad');
